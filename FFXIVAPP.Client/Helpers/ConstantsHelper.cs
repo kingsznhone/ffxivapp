@@ -19,11 +19,12 @@ using FFXIVAPP.Common.Core.Constant;
 
 namespace FFXIVAPP.Client.Helpers
 {
+    using System;
+
     internal static class ConstantsHelper
     {
-        public static void UpdatePluginConstants()
-        {
-            AppContextHelper.Instance.RaiseNewConstants(new ConstantsEntity
+        public static void UpdatePluginConstants() {
+            AppContextHelper.Instance.RaiseConstantsUpdated(new ConstantsEntity
             {
                 AutoTranslate = Constants.AutoTranslate,
                 CharacterName = Constants.CharacterName,

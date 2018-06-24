@@ -44,7 +44,7 @@ namespace FFXIVAPP.Client
 
         private static bool _hasPlugins;
         private string _appTitle;
-        private List<ChatLogEntry> _chatHistory;
+        private List<ChatLogItem> _chatHistory;
         private string _configurationsPath;
         private string _currentVersion;
         private string _downloadUri;
@@ -292,9 +292,9 @@ namespace FFXIVAPP.Client
             }
         }
 
-        public List<ChatLogEntry> ChatHistory
+        public List<ChatLogItem> ChatHistory
         {
-            get { return _chatHistory ?? (_chatHistory = new List<ChatLogEntry>()); }
+            get { return _chatHistory ?? (_chatHistory = new List<ChatLogItem>()); }
             set
             {
                 _chatHistory = value;

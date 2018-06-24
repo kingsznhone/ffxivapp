@@ -72,11 +72,11 @@ namespace FFXIVAPP.Client.Memory
 
             Func<bool> scanner = delegate
             {
-                var readResult = Reader.GetPlayerInfo();
+                var readResult = Reader.GetCurrentPlayer();
 
                 #region Notifications
 
-                AppContextHelper.Instance.RaiseNewPlayerEntity(readResult.PlayerEntity);
+                AppContextHelper.Instance.RaiseCurrentPlayerUpdated(readResult.CurrentPlayer);
 
                 #endregion
 

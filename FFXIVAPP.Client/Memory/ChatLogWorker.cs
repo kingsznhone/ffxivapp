@@ -85,9 +85,9 @@ namespace FFXIVAPP.Client.Memory
 
                     #region Notifications
 
-                    foreach (var chatLogEntry in readResult.ChatLogEntries)
+                    foreach (var chatLogEntry in readResult.ChatLogItems)
                     {
-                        AppContextHelper.Instance.RaiseNewChatLogEntry(chatLogEntry);
+                        AppContextHelper.Instance.RaiseChatLogItemReceived(chatLogEntry);
                     }
 
                     #endregion

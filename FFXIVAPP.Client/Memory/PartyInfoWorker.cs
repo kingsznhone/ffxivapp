@@ -86,17 +86,17 @@ namespace FFXIVAPP.Client.Memory
                 if (!ReferencesSet)
                 {
                     ReferencesSet = true;
-                    AppContextHelper.Instance.RaiseNewPartyEntries(readResult.PartyEntities);
+                    AppContextHelper.Instance.RaisePartyMembersUpdated(readResult.PartyMembers);
                 }
 
-                if (readResult.NewParty.Any())
+                if (readResult.NewPartyMembers.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewPartyAddedEntries(readResult.NewParty);
+                    AppContextHelper.Instance.RaisePartyMembersAdded(readResult.NewPartyMembers);
                 }
 
-                if (readResult.RemovedParty.Any())
+                if (readResult.RemovedPartyMembers.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewPartyRemovedEntries(readResult.RemovedParty.Keys.ToList());
+                    AppContextHelper.Instance.RaisePartyMembersRemoved(readResult.RemovedPartyMembers);
                 }
 
                 #endregion

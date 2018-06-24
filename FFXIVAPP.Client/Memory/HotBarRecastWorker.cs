@@ -108,7 +108,7 @@ namespace FFXIVAPP.Client.Memory
 
                 #region Notifications
 
-                AppContextHelper.Instance.RaiseNewActionEntities(readResult.ActionEntities);
+                AppContextHelper.Instance.RaiseActionContainersUpdated(readResult.ActionContainers);
 
                 #endregion
 

@@ -143,7 +143,7 @@ namespace FFXIVAPP.Client
             Initializer.LoadAvailableAudioDevices();
             Initializer.LoadAvailableNetworkDevices();
             Initializer.LoadSoundsIntoCache();
-            Initializer.LoadPlugins();
+            //Initializer.LoadPlugins();
 
             #endregion
         }

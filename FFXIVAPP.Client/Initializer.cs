@@ -795,7 +795,7 @@ namespace FFXIVAPP.Client
         {
             var packet = e.NetworkPacket;
 
-            AppContextHelper.Instance.RaiseNewPacket(new NetworkPacket
+            AppContextHelper.Instance.RaiseNetworkPacketReceived(new NetworkPacket
             {
                 Buffer = packet.Buffer,
                 CurrentPosition = packet.CurrentPosition,

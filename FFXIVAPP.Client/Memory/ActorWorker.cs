@@ -114,20 +114,20 @@ namespace FFXIVAPP.Client.Memory
 
                 #region Notifications
 
-                if (!MonsterReferencesSet && readResult.MonsterEntities.Any())
+                if (!MonsterReferencesSet && readResult.CurrentMonsters.Any())
                 {
                     MonsterReferencesSet = true;
-                    AppContextHelper.Instance.RaiseNewMonsterEntries(readResult.MonsterEntities);
+                    AppContextHelper.Instance.RaiseMonsterItemsUpdated(readResult.CurrentMonsters);
                 }
-                if (!NPCReferencesSet && readResult.NPCEntities.Any())
+                if (!NPCReferencesSet && readResult.CurrentNPCs.Any())
                 {
                     NPCReferencesSet = true;
-                    AppContextHelper.Instance.RaiseNewNPCEntries(readResult.NPCEntities);
+                    AppContextHelper.Instance.RaiseNPCItemsUpdated(readResult.CurrentNPCs);
                 }
-                if (!PCReferencesSet && readResult.PCEntities.Any())
+                if (!PCReferencesSet && readResult.CurrentPCs.Any())
                 {
                     PCReferencesSet = true;
-                    AppContextHelper.Instance.RaiseNewPCEntries(readResult.PCEntities);
+                    AppContextHelper.Instance.RaisePCItemsUpdated(readResult.CurrentPCs);
                 }
 
                 if (MonsterReferencesSet && NPCReferencesSet && PCReferencesSet)
@@ -135,30 +135,30 @@ namespace FFXIVAPP.Client.Memory
                     ReferencesSet = true;
                 }
 
-                if (readResult.NewMonster.Any())
+                if (readResult.NewMonsters.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewMonsterAddedEntries(readResult.NewMonster);
+                    AppContextHelper.Instance.RaiseMonsterItemsAdded(readResult.NewMonsters);
                 }
-                if (readResult.NewNPC.Any())
+                if (readResult.NewNPCs.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewNPCAddedEntries(readResult.NewNPC);
+                    AppContextHelper.Instance.RaiseNPCItemsAdded(readResult.NewNPCs);
                 }
-                if (readResult.NewPC.Any())
+                if (readResult.NewPCs.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewPCAddedEntries(readResult.NewPC);
+                    AppContextHelper.Instance.RaisePCItemsAdded(readResult.NewPCs);
                 }
 
-                if (readResult.RemovedMonster.Any())
+                if (readResult.RemovedMonsters.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewMonsterRemovedEntries(readResult.RemovedMonster.Keys.ToList());
+                    AppContextHelper.Instance.RaiseMonsterItemsRemoved(readResult.RemovedMonsters);
                 }
-                if (readResult.RemovedNPC.Any())
+                if (readResult.RemovedNPCs.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewNPCRemovedEntries(readResult.RemovedNPC.Keys.ToList());
+                    AppContextHelper.Instance.RaiseNPCItemsRemoved(readResult.RemovedNPCs);
                 }
-                if (readResult.RemovedPC.Any())
+                if (readResult.RemovedPCs.Any())
                 {
-                    AppContextHelper.Instance.RaiseNewPCRemovedEntries(readResult.RemovedPC.Keys.ToList());
+                    AppContextHelper.Instance.RaisePCItemsRemoved(readResult.RemovedPCs);
                 }
 
                 #endregion

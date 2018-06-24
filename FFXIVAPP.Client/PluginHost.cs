@@ -37,6 +37,8 @@ using Sharlayan.Core;
 
 namespace FFXIVAPP.Client
 {
+    using Sharlayan.Core.Enums;
+
     internal class PluginHost : MarshalByRefObject, IPluginHost
     {
         #region Logger
@@ -227,232 +229,175 @@ namespace FFXIVAPP.Client
             MessageBoxHelper.ShowMessageAsync(title, message, delegate { pluginInstance.Instance.PopupResult = MessageBoxResult.OK; }, cancelAction);
         }
 
-        public event EventHandler<ConstantsEntityEvent> NewConstantsEntity = delegate { };
+        public event EventHandler<ActionContainersEvent> ActionContainersUpdated = delegate { };
 
-        public event EventHandler<ChatLogEntryEvent> NewChatLogEntry = delegate { };
+        public event EventHandler<ChatLogItemEvent> ChatLogItemReceived = delegate { };
 
-        public event EventHandler<ActorEntitiesAddedEvent> NewMonsterEntriesAdded = delegate { };
+        public event EventHandler<ConstantsEntityEvent> ConstantsUpdated = delegate { };
 
-        public event EventHandler<ActorEntitiesEvent> NewMonsterEntries = delegate { };
+        public event EventHandler<InventoryContainersEvent> InventoryContainersUpdated = delegate { };
 
-        public event EventHandler<ActorEntitiesRemovedEvent> NewNPCEntriesRemoved = delegate { };
+        public event EventHandler<ActorItemsEvent> MonsterItemsUpdated = delegate { };
 
-        public event EventHandler<ActorEntitiesAddedEvent> NewNPCEntriesAdded = delegate { };
+        public event EventHandler<ActorItemsAddedEvent> MonsterItemsAdded = delegate { };
 
-        public event EventHandler<ActorEntitiesEvent> NewNPCEntries = delegate { };
+        public event EventHandler<ActorItemsRemovedEvent> MonsterItemsRemoved = delegate { };
 
-        public event EventHandler<ActorEntitiesRemovedEvent> NewMonsterEntriesRemoved = delegate { };
+        public event EventHandler<NetworkPacketEvent> NetworkPacketReceived = delegate { };
 
-        public event EventHandler<ActorEntitiesAddedEvent> NewPCEntriesAdded = delegate { };
+        public event EventHandler<ActorItemsEvent> NPCItemsUpdated = delegate { };
 
-        public event EventHandler<ActorEntitiesEvent> NewPCEntries = delegate { };
+        public event EventHandler<ActorItemsAddedEvent> NPCItemsAdded = delegate { };
 
-        public event EventHandler<ActorEntitiesRemovedEvent> NewPCEntriesRemoved = delegate { };
+        public event EventHandler<ActorItemsRemovedEvent> NPCItemsRemoved = delegate { };
 
-        public event EventHandler<PlayerEntityEvent> NewPlayerEntity = delegate { };
+        public event EventHandler<PartyMembersEvent> PartyMembersUpdated = delegate { };
 
-        public event EventHandler<TargetEntityEvent> NewTargetEntity = delegate { };
+        public event EventHandler<PartyMembersAddedEvent> PartyMembersAdded = delegate { };
 
-        public event EventHandler<PartyEntitiesAddedEvent> NewPartyEntriesAdded = delegate { };
+        public event EventHandler<PartyMembersRemovedEvent> PartyMembersRemoved = delegate { };
 
-        public event EventHandler<PartyEntitiesEvent> NewPartyEntries = delegate { };
+        public event EventHandler<ActorItemsEvent> PCItemsUpdated = delegate { };
 
-        public event EventHandler<PartyEntitiesRemovedEvent> NewPartyEntriesRemoved = delegate { };
+        public event EventHandler<ActorItemsAddedEvent> PCItemsAdded = delegate { };
 
-        public event EventHandler<InventoryEntitiesEvent> NewInventoryEntries = delegate { };
+        public event EventHandler<ActorItemsRemovedEvent> PCItemsRemoved = delegate { };
 
-        public event EventHandler<NetworkPacketEvent> NewNetworkPacket = delegate { };
+        public event EventHandler<CurrentPlayerEvent> CurrentPlayerUpdated = delegate { };
 
-        public event EventHandler<ActionEntityEvent> NewActionEntity = delegate { };
+        public event EventHandler<TargetInfoEvent> TargetInfoUpdated = delegate { };
 
-        public virtual void RaiseNewConstantsEntity(ConstantsEntity e)
+        public virtual void RaiseActionContainersUpdated(List<ActionContainer> actionContainers)
         {
-            var constantsEntityEvent = new ConstantsEntityEvent(this, e);
-            var handler = NewConstantsEntity;
-            if (handler != null)
-            {
-                handler(this, constantsEntityEvent);
-            }
+            var raised = new ActionContainersEvent(this, actionContainers);
+            var handler = this.ActionContainersUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewChatLogEntry(ChatLogEntry e)
+        public virtual void RaiseChatLogItemReceived(ChatLogItem chatLogItem)
         {
-            var chatLogEntryEvent = new ChatLogEntryEvent(this, e);
-            var handler = NewChatLogEntry;
-            if (handler != null)
-            {
-                handler(this, chatLogEntryEvent);
-            }
+            var raised = new ChatLogItemEvent(this, chatLogItem);
+            var handler = this.ChatLogItemReceived;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewMonsterAddedEntries(List<UInt32> e)
+        public virtual void RaiseConstantsUpdated(ConstantsEntity constantsEntity)
         {
-            var actorEntitiesAddedEvent = new ActorEntitiesAddedEvent(this, e);
-            var handler = NewMonsterEntriesAdded;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesAddedEvent);
-            }
+            var raised = new ConstantsEntityEvent(this, constantsEntity);
+            var handler = this.ConstantsUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewMonsterEntries(ConcurrentDictionary<UInt32, ActorEntity> e)
+        public virtual void RaiseInventoryContainersUpdated(List<InventoryContainer> inventoryContainers)
         {
-            var actorEntitiesEvent = new ActorEntitiesEvent(this, e);
-            var handler = NewMonsterEntries;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesEvent);
-            }
+            var raised = new InventoryContainersEvent(this, inventoryContainers);
+            var handler = this.InventoryContainersUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewMonsterRemovedEntries(List<UInt32> e)
+        public virtual void RaiseMonsterItemsUpdated(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var actorEntitiesRemovedEvent = new ActorEntitiesRemovedEvent(this, e);
-            var handler = NewMonsterEntriesRemoved;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesRemovedEvent);
-            }
+            var raised = new ActorItemsEvent(this, actorItems);
+            var handler = this.MonsterItemsUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewNPCAddedEntries(List<UInt32> e)
+        public virtual void RaiseMonsterItemsAdded(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var actorEntitiesAddedEvent = new ActorEntitiesAddedEvent(this, e);
-            var handler = NewNPCEntriesAdded;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesAddedEvent);
-            }
+            var raised = new ActorItemsAddedEvent(this, actorItems);
+            var handler = this.MonsterItemsAdded;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewNPCEntries(ConcurrentDictionary<UInt32, ActorEntity> e)
+        public virtual void RaiseMonsterItemsRemoved(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var actorEntitiesEvent = new ActorEntitiesEvent(this, e);
-            var handler = NewNPCEntries;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesEvent);
-            }
+            var raised = new ActorItemsRemovedEvent(this, actorItems);
+            var handler = this.MonsterItemsRemoved;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewNPCRemovedEntries(List<UInt32> e)
+        public virtual void RaiseNetworkPacketReceived(NetworkPacket networkPacket)
         {
-            var actorEntitiesRemovedEvent = new ActorEntitiesRemovedEvent(this, e);
-            var handler = NewNPCEntriesRemoved;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesRemovedEvent);
-            }
+            var raised = new NetworkPacketEvent(this, networkPacket);
+            var handler = this.NetworkPacketReceived;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPCAddedEntries(List<UInt32> e)
+        public virtual void RaiseNPCItemsUpdated(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var actorEntitiesAddedEvent = new ActorEntitiesAddedEvent(this, e);
-            var handler = NewPCEntriesAdded;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesAddedEvent);
-            }
+            var raised = new ActorItemsEvent(this, actorItems);
+            var handler = this.NPCItemsUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPCEntries(ConcurrentDictionary<UInt32, ActorEntity> e)
+        public virtual void RaiseNPCItemsAdded(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var actorEntitiesEvent = new ActorEntitiesEvent(this, e);
-            var handler = NewPCEntries;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesEvent);
-            }
+            var raised = new ActorItemsAddedEvent(this, actorItems);
+            var handler = this.NPCItemsAdded;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPCRemovedEntries(List<UInt32> e)
+        public virtual void RaiseNPCItemsRemoved(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var actorEntitiesRemovedEvent = new ActorEntitiesRemovedEvent(this, e);
-            var handler = NewPCEntriesRemoved;
-            if (handler != null)
-            {
-                handler(this, actorEntitiesRemovedEvent);
-            }
+            var raised = new ActorItemsRemovedEvent(this, actorItems);
+            var handler = this.NPCItemsRemoved;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPlayerEntity(PlayerEntity e)
+        public virtual void RaisePartyMembersUpdated(ConcurrentDictionary<uint, PartyMember> partyMembers)
         {
-            var playerEntityEvent = new PlayerEntityEvent(this, e);
-            var handler = NewPlayerEntity;
-            if (handler != null)
-            {
-                handler(this, playerEntityEvent);
-            }
+            var raised = new PartyMembersEvent(this, partyMembers);
+            var handler = this.PartyMembersUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewTargetEntity(TargetEntity e)
+        public virtual void RaisePartyMembersAdded(ConcurrentDictionary<uint, PartyMember> partyMembers)
         {
-            var targetEntityEvent = new TargetEntityEvent(this, e);
-            var handler = NewTargetEntity;
-            if (handler != null)
-            {
-                handler(this, targetEntityEvent);
-            }
+            var raised = new PartyMembersAddedEvent(this, partyMembers);
+            var handler = this.PartyMembersAdded;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPartyAddedEntries(List<UInt32> e)
+        public virtual void RaisePartyMembersRemoved(ConcurrentDictionary<uint, PartyMember> partyMembers)
         {
-            var partyEntitiesAddedEvent = new PartyEntitiesAddedEvent(this, e);
-            var handler = NewPartyEntriesAdded;
-            if (handler != null)
-            {
-                handler(this, partyEntitiesAddedEvent);
-            }
+            var raised = new PartyMembersRemovedEvent(this, partyMembers);
+            var handler = this.PartyMembersRemoved;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPartyEntries(ConcurrentDictionary<UInt32, PartyEntity> e)
+        public virtual void RaisePCItemsUpdated(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var partyEntitiesEvent = new PartyEntitiesEvent(this, e);
-            var handler = NewPartyEntries;
-            if (handler != null)
-            {
-                handler(this, partyEntitiesEvent);
-            }
+            var raised = new ActorItemsEvent(this, actorItems);
+            var handler = this.PCItemsUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewPartyRemovedEntries(List<UInt32> e)
+        public virtual void RaisePCItemsAdded(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var partyEntitiesRemovedEvent = new PartyEntitiesRemovedEvent(this, e);
-            var handler = NewPartyEntriesRemoved;
-            if (handler != null)
-            {
-                handler(this, partyEntitiesRemovedEvent);
-            }
+            var raised = new ActorItemsAddedEvent(this, actorItems);
+            var handler = this.PCItemsAdded;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewInventoryEntries(List<InventoryEntity> e)
+        public virtual void RaisePCItemsRemoved(ConcurrentDictionary<uint, ActorItem> actorItems)
         {
-            var inventoryEntitiesEvent = new InventoryEntitiesEvent(this, e);
-            var handler = NewInventoryEntries;
-            if (handler != null)
-            {
-                handler(this, inventoryEntitiesEvent);
-            }
+            var raised = new ActorItemsRemovedEvent(this, actorItems);
+            var handler = this.PCItemsRemoved;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewNetworkPacket(NetworkPacket e)
+        public virtual void RaiseCurrentPlayerUpdated(CurrentPlayer currentPlayer)
         {
-            var networkPacketEvent = new NetworkPacketEvent(this, e);
-            var handler = NewNetworkPacket;
-            if (handler != null)
-            {
-                handler(this, networkPacketEvent);
-            }
+            var raised = new CurrentPlayerEvent(this, currentPlayer);
+            var handler = this.CurrentPlayerUpdated;
+            handler?.Invoke(this, raised);
         }
 
-        public virtual void RaiseNewActionEntities(List<ActionEntity> e)
+        public virtual void RaiseTargetInfoUpdated(TargetInfo targetInfo)
         {
-            var actionEntityEvent = new ActionEntityEvent(this, e);
-            var handler = NewActionEntity;
-            if (handler != null)
-            {
-                handler(this, actionEntityEvent);
-            }
+            var raised = new TargetInfoEvent(this, targetInfo);
+            var handler = this.TargetInfoUpdated;
+            handler?.Invoke(this, raised);
         }
 
         #endregion

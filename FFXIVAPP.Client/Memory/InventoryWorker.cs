@@ -104,11 +104,11 @@ namespace FFXIVAPP.Client.Memory
 
             Func<bool> scanner = delegate
             {
-                var readResult = Reader.GetInventoryItems();
+                var readResult = Reader.GetInventory();
 
                 #region Notifications
 
-                AppContextHelper.Instance.RaiseNewInventoryEntries(readResult.InventoryEntities);
+                AppContextHelper.Instance.RaiseInventoryContainersUpdated(readResult.InventoryContainers);
 
                 #endregion
 
